@@ -1,0 +1,9 @@
+# Tested with python 3.8 on OSX
+
+numpy
+matplotlib
+scikit-learn
+scipy
+torch==1.9.0
+torchmeta==1.8.0
+torchvision==0.10.0
