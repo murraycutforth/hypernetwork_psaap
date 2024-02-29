@@ -3,7 +3,10 @@
 numpy
 matplotlib
 scikit-learn
+scikit-image
+pandas
 scipy
+pillow
 torch==1.9.0
 torchmeta==1.8.0
 torchvision==0.10.0
