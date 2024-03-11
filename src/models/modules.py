@@ -1,11 +1,13 @@
 import torch
 from torch import nn
 from torchmeta.modules import (MetaModule, MetaSequential)
-from torchmeta.modules.utils import get_subdict
 import numpy as np
 from collections import OrderedDict
 import math
 import torch.nn.functional as F
+
+import logging
+logger = logging.getLogger(__name__)
 
 
 class BatchLinear(nn.Linear, MetaModule):
@@ -19,6 +21,11 @@ class BatchLinear(nn.Linear, MetaModule):
 
         bias = params.get('bias', None)
         weight = params['weight']
+
+        #print()
+        #print(input.shape)
+        #print(weight.shape, weight.permute(*[i for i in range(len(weight.shape) - 2)], -1, -2).shape)
+        #print(bias.shape, bias.unsqueeze(-2).shape)
 
         output = input.matmul(weight.permute(*[i for i in range(len(weight.shape) - 2)], -1, -2))
         output += bias.unsqueeze(-2)
@@ -86,11 +93,14 @@ class FCBlock(MetaModule):
         if first_layer_init is not None: # Apply special initialization to first layer, if applicable.
             self.net[0].apply(first_layer_init)
 
+        logger.debug(f"FCBlock initialized with {num_hidden_layers} hidden layers, {hidden_features} hidden features")
+        logger.debug(f'Model summary: {self}')
+
     def forward(self, coords, params=None, **kwargs):
         if params is None:
             params = OrderedDict(self.named_parameters())
 
-        output = self.net(coords, params=get_subdict(params, 'net'))
+        output = self.net(coords, params=self.get_subdict(params, 'net'))
         return output
 
     def forward_with_activations(self, coords, params=None, retain_grad=False):
@@ -103,10 +113,10 @@ class FCBlock(MetaModule):
         x = coords.clone().detach().requires_grad_(True)
         activations['input'] = x
         for i, layer in enumerate(self.net):
-            subdict = get_subdict(params, 'net.%d' % i)
+            subdict = self.get_subdict(params, 'net.%d' % i)
             for j, sublayer in enumerate(layer):
                 if isinstance(sublayer, BatchLinear):
-                    x = sublayer(x, params=get_subdict(subdict, '%d' % j))
+                    x = sublayer(x, params=self.get_subdict(subdict, '%d' % j))
                 else:
                     x = sublayer(x)
 

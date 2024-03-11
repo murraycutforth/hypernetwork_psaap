@@ -25,23 +25,22 @@ logger = logging.getLogger(__name__)
 
 
 def main():
+    results_path = project_dir() / 'output' / 'reconstruction_exp_results.json'
     tensor_list = tensor_list_from_image()
 
     lrs = [1.25e-4, 5e-4, 4e-3]
-    img_inds = [0, 5, 10, 15, 20]
+    img_inds = [0, 5, 10, 15, 20, 24]
     hidden_features = [256]
 
-    output_path = project_dir() / 'output' / 'reconstruction_sim_schlieren_results.json'
-
-    if output_path.exists():
-        with open(output_path, 'r') as f:
+    if results_path.exists():
+        with open(results_path, 'r') as f:
             results = json.load(f)
     else:
         results = []
         for lr, ind, fts in itertools.product(lrs, img_inds, hidden_features):
             results.append(train_eval_siren(tensor_list, ind=ind, lr=lr, hidden_features=fts))
 
-        with open(output_path, 'w') as f:
+        with open(results_path, 'w') as f:
             f.write(json.dumps(results, indent=4))
 
     df = results_to_dataframe(results)
@@ -70,7 +69,7 @@ def train_eval_siren(img_list: list,
         'ind': ind
     }
 
-    logging.info(f'Calling train_eval_siren with params: img_sidelength={img_sidelength}, hidden_features={hidden_features}, hidden_layers={hidden_layers}, loss_atol={loss_atol}, lr={lr}')
+    logging.info(f'Calling train_eval_siren with params: ind={ind}, img_sidelength={img_sidelength}, hidden_features={hidden_features}, hidden_layers={hidden_layers}, loss_atol={loss_atol}, lr={lr}')
 
     model = Siren(in_features=2, out_features=1, hidden_features=hidden_features, hidden_layers=hidden_layers, outermost_linear=True)
     # Number of parameters in model
@@ -241,20 +240,22 @@ class ImageFittingDataset(Dataset):
 
 
 def tensor_list_from_image(sidelength: int = 256) -> List[torch.Tensor]:
-    """Load schlieren images from LF simulation and convert to tensor
+    """Load schlieren images from exp and convert to tensor
     """
 
-    # For now, just use schlieren from a single run - TODO: use more runs
+    data_dir = project_dir() / 'data' / 'exp' / 'images'
 
-    data_dir = project_dir() / 'data' / 'sim_lf' / 'schlieren' / "schlieren_COARSE_sim_99"
-    def load_np_stack():
-        files = sorted(data_dir.glob("*.npz"))
-        frames = [np.load(f)["F_yz"] for f in files]
-        return np.stack(frames, axis=0)
+    run_dirs = sorted(list(data_dir.glob('*')))
 
-    x = load_np_stack()
+    run_dir = run_dirs[0]  # Only one run for now
 
-    x = list(map(lambda x: PIL.Image.fromarray(x / x.max()), x))
+    print(run_dir)
+
+    file_paths = sorted(list(run_dir.glob('*.png')))
+
+    x = list(PIL.Image.open(x) for x in file_paths)
+    x = list(np.array(im) / 255 for im in x)
+    x = list(PIL.Image.fromarray(im) for im in x)
 
     transform = Compose([
         Resize((sidelength, sidelength)),
