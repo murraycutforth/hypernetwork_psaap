@@ -5,6 +5,7 @@ matplotlib
 scikit-learn
 scikit-image
 pandas
+jupyterlab
 scipy
 pillow
 torch==1.9.0

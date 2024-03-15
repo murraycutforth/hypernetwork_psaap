@@ -1,0 +1,179 @@
+PressureTraceHypernet(
+  (hypo_net): FCBlock(
+    (net): MetaSequential(
+      (0): MetaSequential(
+        (0): BatchLinear(in_features=1, out_features=32, bias=True)
+        (1): ELU(alpha=1.0, inplace=True)
+      )
+      (1): MetaSequential(
+        (0): BatchLinear(in_features=32, out_features=32, bias=True)
+        (1): ELU(alpha=1.0, inplace=True)
+      )
+      (2): MetaSequential(
+        (0): BatchLinear(in_features=32, out_features=32, bias=True)
+        (1): ELU(alpha=1.0, inplace=True)
+      )
+      (3): MetaSequential(
+        (0): BatchLinear(in_features=32, out_features=32, bias=True)
+        (1): ELU(alpha=1.0, inplace=True)
+      )
+      (4): MetaSequential(
+        (0): BatchLinear(in_features=32, out_features=1, bias=True)
+      )
+    )
+  )
+  (hyper_net): HyperNetwork(
+    (nets): ModuleList(
+      (0): FCBlock(
+        (net): MetaSequential(
+          (0): MetaSequential(
+            (0): BatchLinear(in_features=3, out_features=32, bias=True)
+            (1): ELU(alpha=1.0, inplace=True)
+          )
+          (1): MetaSequential(
+            (0): BatchLinear(in_features=32, out_features=32, bias=True)
+            (1): ELU(alpha=1.0, inplace=True)
+          )
+          (2): MetaSequential(
+            (0): BatchLinear(in_features=32, out_features=32, bias=True)
+          )
+        )
+      )
+      (1): FCBlock(
+        (net): MetaSequential(
+          (0): MetaSequential(
+            (0): BatchLinear(in_features=3, out_features=32, bias=True)
+            (1): ELU(alpha=1.0, inplace=True)
+          )
+          (1): MetaSequential(
+            (0): BatchLinear(in_features=32, out_features=32, bias=True)
+            (1): ELU(alpha=1.0, inplace=True)
+          )
+          (2): MetaSequential(
+            (0): BatchLinear(in_features=32, out_features=32, bias=True)
+          )
+        )
+      )
+      (2): FCBlock(
+        (net): MetaSequential(
+          (0): MetaSequential(
+            (0): BatchLinear(in_features=3, out_features=32, bias=True)
+            (1): ELU(alpha=1.0, inplace=True)
+          )
+          (1): MetaSequential(
+            (0): BatchLinear(in_features=32, out_features=32, bias=True)
+            (1): ELU(alpha=1.0, inplace=True)
+          )
+          (2): MetaSequential(
+            (0): BatchLinear(in_features=32, out_features=1024, bias=True)
+          )
+        )
+      )
+      (3): FCBlock(
+        (net): MetaSequential(
+          (0): MetaSequential(
+            (0): BatchLinear(in_features=3, out_features=32, bias=True)
+            (1): ELU(alpha=1.0, inplace=True)
+          )
+          (1): MetaSequential(
+            (0): BatchLinear(in_features=32, out_features=32, bias=True)
+            (1): ELU(alpha=1.0, inplace=True)
+          )
+          (2): MetaSequential(
+            (0): BatchLinear(in_features=32, out_features=32, bias=True)
+          )
+        )
+      )
+      (4): FCBlock(
+        (net): MetaSequential(
+          (0): MetaSequential(
+            (0): BatchLinear(in_features=3, out_features=32, bias=True)
+            (1): ELU(alpha=1.0, inplace=True)
+          )
+          (1): MetaSequential(
+            (0): BatchLinear(in_features=32, out_features=32, bias=True)
+            (1): ELU(alpha=1.0, inplace=True)
+          )
+          (2): MetaSequential(
+            (0): BatchLinear(in_features=32, out_features=1024, bias=True)
+          )
+        )
+      )
+      (5): FCBlock(
+        (net): MetaSequential(
+          (0): MetaSequential(
+            (0): BatchLinear(in_features=3, out_features=32, bias=True)
+            (1): ELU(alpha=1.0, inplace=True)
+          )
+          (1): MetaSequential(
+            (0): BatchLinear(in_features=32, out_features=32, bias=True)
+            (1): ELU(alpha=1.0, inplace=True)
+          )
+          (2): MetaSequential(
+            (0): BatchLinear(in_features=32, out_features=32, bias=True)
+          )
+        )
+      )
+      (6): FCBlock(
+        (net): MetaSequential(
+          (0): MetaSequential(
+            (0): BatchLinear(in_features=3, out_features=32, bias=True)
+            (1): ELU(alpha=1.0, inplace=True)
+          )
+          (1): MetaSequential(
+            (0): BatchLinear(in_features=32, out_features=32, bias=True)
+            (1): ELU(alpha=1.0, inplace=True)
+          )
+          (2): MetaSequential(
+            (0): BatchLinear(in_features=32, out_features=1024, bias=True)
+          )
+        )
+      )
+      (7): FCBlock(
+        (net): MetaSequential(
+          (0): MetaSequential(
+            (0): BatchLinear(in_features=3, out_features=32, bias=True)
+            (1): ELU(alpha=1.0, inplace=True)
+          )
+          (1): MetaSequential(
+            (0): BatchLinear(in_features=32, out_features=32, bias=True)
+            (1): ELU(alpha=1.0, inplace=True)
+          )
+          (2): MetaSequential(
+            (0): BatchLinear(in_features=32, out_features=32, bias=True)
+          )
+        )
+      )
+      (8): FCBlock(
+        (net): MetaSequential(
+          (0): MetaSequential(
+            (0): BatchLinear(in_features=3, out_features=32, bias=True)
+            (1): ELU(alpha=1.0, inplace=True)
+          )
+          (1): MetaSequential(
+            (0): BatchLinear(in_features=32, out_features=32, bias=True)
+            (1): ELU(alpha=1.0, inplace=True)
+          )
+          (2): MetaSequential(
+            (0): BatchLinear(in_features=32, out_features=32, bias=True)
+          )
+        )
+      )
+      (9): FCBlock(
+        (net): MetaSequential(
+          (0): MetaSequential(
+            (0): BatchLinear(in_features=3, out_features=32, bias=True)
+            (1): ELU(alpha=1.0, inplace=True)
+          )
+          (1): MetaSequential(
+            (0): BatchLinear(in_features=32, out_features=32, bias=True)
+            (1): ELU(alpha=1.0, inplace=True)
+          )
+          (2): MetaSequential(
+            (0): BatchLinear(in_features=32, out_features=1, bias=True)
+          )
+        )
+      )
+    )
+  )
+)

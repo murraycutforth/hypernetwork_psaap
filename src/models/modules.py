@@ -90,11 +90,11 @@ class FCBlock(MetaModule):
         if self.weight_init is not None:
             self.net.apply(self.weight_init)
 
-        if first_layer_init is not None: # Apply special initialization to first layer, if applicable.
-            self.net[0].apply(first_layer_init)
+        #if first_layer_init is not None: # Apply special initialization to first layer, if applicable.
+        #    self.net[0].apply(first_layer_init)
 
         logger.debug(f"FCBlock initialized with {num_hidden_layers} hidden layers, {hidden_features} hidden features")
-        logger.debug(f'Model summary: {self}')
+        # logger.debug(f'Model summary: {self}')
 
     def forward(self, coords, params=None, **kwargs):
         if params is None:
@@ -633,6 +633,7 @@ def sine_init(m):
     with torch.no_grad():
         if hasattr(m, 'weight'):
             num_input = m.weight.size(-1)
+            print(num_input)
             # See supplement Sec. 1.5 for discussion of factor 30
             m.weight.uniform_(-np.sqrt(6 / num_input) / 30, np.sqrt(6 / num_input) / 30)
 

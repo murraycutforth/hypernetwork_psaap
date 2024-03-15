@@ -15,12 +15,13 @@ class PressureTraceHypernet(nn.Module):
     '''A module encompassing the hypernetwork and hyponetwork for predicting pressure traces
     '''
 
-    def __init__(self, hyper_hidden_features: int = 32, hyper_hidden_layers: int = 1):
+    def __init__(self, hyper_hidden_features: int = 32, hyper_hidden_layers: int = 1,
+                 hypo_nonlinearity: str = 'sine', hyper_nonlinearity: str = 'sine'):
         super().__init__()
 
         self.hypo_net = modules.FCBlock(in_features=1,
                                         out_features=1,
-                                        nonlinearity='elu',
+                                        nonlinearity=hypo_nonlinearity,
                                         outermost_linear=True,
                                         num_hidden_layers=3,
                                         hidden_features=32)
@@ -28,7 +29,8 @@ class PressureTraceHypernet(nn.Module):
         self.hyper_net = HyperNetwork(hyper_in_features=3,
                                       hyper_hidden_layers=hyper_hidden_layers,
                                       hyper_hidden_features=hyper_hidden_features,
-                                      hypo_module=self.hypo_net)
+                                      hypo_module=self.hypo_net,
+                                      nonlinearity=hyper_nonlinearity)
 
     def forward(self, model_input):
         assert 'xi' in model_input, "model_input must contain a key 'xi' for the hypernetwork input"
@@ -51,7 +53,7 @@ class PressureTraceHypernet(nn.Module):
 
 
 class HyperNetwork(nn.Module):
-    def __init__(self, hyper_in_features, hyper_hidden_layers, hyper_hidden_features, hypo_module):
+    def __init__(self, hyper_in_features, hyper_hidden_layers, hyper_hidden_features, hypo_module, nonlinearity):
         '''
 
         Args:
@@ -74,7 +76,7 @@ class HyperNetwork(nn.Module):
             hn = modules.FCBlock(in_features=hyper_in_features,
                                  out_features=int(torch.prod(torch.tensor(param.size()))),
                                  num_hidden_layers=hyper_hidden_layers, hidden_features=hyper_hidden_features,
-                                 outermost_linear=True, nonlinearity='relu')
+                                 outermost_linear=True, nonlinearity=nonlinearity)
             self.nets.append(hn)
 
             if 'weight' in name:
@@ -117,6 +119,10 @@ def hyper_bias_init(m):
         fan_in, _ = nn.init._calculate_fan_in_and_fan_out(m.weight)
         with torch.no_grad():
             m.bias.uniform_(-1 / fan_in, 1 / fan_in)
+
+
+# Functions for extraction of intermediate activations
+
 
 # class NeuralProcessImplicit2DHypernet(nn.Module):
 #    '''A canonical 2D representation hypernetwork mapping 2D coords to out_features.'''
